@@ -2,7 +2,8 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1024">
+    
     <title>Verifikasi Captcha</title>
     <style>
         body {
@@ -14,14 +15,14 @@
             height: 100vh;
             padding-top: 80px;
             margin: 0;
+            /* Memastikan body tidak menyusut lebih kecil dari 1024px */
+            min-width: 1024px; 
         }
 
         .container {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            width: 90%; /* Responsif untuk layar kecil */
-            max-width: 500px;
         }
 
         .label-text {
@@ -33,8 +34,7 @@
         .captcha-area {
             display: flex;
             align-items: center;
-            gap: 20px; /* Jarak default desktop */
-            flex-wrap: wrap; /* Izinkan elemen turun ke bawah jika ruang sempit */
+            gap: 80px;
         }
 
         .captcha-display {
@@ -48,16 +48,14 @@
             letter-spacing: 6px;
             user-select: none;
             box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-            min-width: 120px;
-            text-align: center;
         }
 
         input[type="text"] {
-            padding: 12px; /* Lebih besar agar mudah ditekan di HP */
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
             width: 200px;
-            font-size: 16px; /* 16px mencegah auto-zoom di iPhone */
+            font-size: 14px;
             outline-color: #007bff;
         }
 
@@ -65,44 +63,17 @@
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 4px;
             cursor: pointer;
             width: fit-content;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
             transition: background 0.2s;
         }
 
         .btn-submit:hover {
             background-color: #0056b3;
-        }
-
-        /* --- MEDIA QUERY UNTUK VERSI SELULER --- */
-        @media (max-width: 480px) {
-            body {
-                padding-top: 40px;
-            }
-
-            .captcha-area {
-                flex-direction: column; /* Susun vertikal di HP */
-                align-items: flex-start;
-                gap: 15px;
-            }
-
-            input[type="text"] {
-                width: 100%; /* Lebar penuh di HP */
-                box-sizing: border-box;
-            }
-
-            .btn-submit {
-                width: 100%; /* Tombol lebar penuh agar mudah diklik jempol */
-            }
-
-            .captcha-display {
-                width: 100%; /* Box captcha lebar penuh */
-                box-sizing: border-box;
-            }
         }
     </style>
 </head>
@@ -113,7 +84,7 @@
     
     <div class="captcha-area">
         <div class="captcha-display" id="captchaBox"></div>
-        <input type="text" id="userInput" placeholder="Ketik kode di sini..." autocomplete="off">
+        <input type="text" id="userInput" placeholder="Ketik kode di sini...">
     </div>
 
     <button class="btn-submit" onclick="checkVerification()">Submit</button>
@@ -133,7 +104,7 @@
 
     function checkVerification() {
         const captchaCode = document.getElementById('captchaBox').innerText.replace(/\s/g, '');
-        const userValue = document.getElementById('userInput').value.toLowerCase().trim();
+        const userValue = document.getElementById('userInput').value.toLowerCase();
 
         if (userValue === captchaCode) {
             window.location.href = targetUrl;
@@ -143,14 +114,6 @@
             document.getElementById('userInput').value = '';
         }
     }
-
-    // Mendukung tombol "Go" atau "Enter" di keyboard HP
-    document.getElementById("userInput").addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            checkVerification();
-        }
-    });
 </script>
 
 </body>
