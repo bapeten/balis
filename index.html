@@ -20,6 +20,8 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            width: 90%; /* Responsif untuk layar kecil */
+            max-width: 500px;
         }
 
         .label-text {
@@ -31,7 +33,8 @@
         .captcha-area {
             display: flex;
             align-items: center;
-            gap: 80px;
+            gap: 20px; /* Jarak default desktop */
+            flex-wrap: wrap; /* Izinkan elemen turun ke bawah jika ruang sempit */
         }
 
         .captcha-display {
@@ -45,14 +48,16 @@
             letter-spacing: 6px;
             user-select: none;
             box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+            min-width: 120px;
+            text-align: center;
         }
 
         input[type="text"] {
-            padding: 10px;
+            padding: 12px; /* Lebih besar agar mudah ditekan di HP */
             border: 1px solid #ccc;
             border-radius: 4px;
             width: 200px;
-            font-size: 14px;
+            font-size: 16px; /* 16px mencegah auto-zoom di iPhone */
             outline-color: #007bff;
         }
 
@@ -60,17 +65,44 @@
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 4px;
             cursor: pointer;
             width: fit-content;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 500;
             transition: background 0.2s;
         }
 
         .btn-submit:hover {
             background-color: #0056b3;
+        }
+
+        /* --- MEDIA QUERY UNTUK VERSI SELULER --- */
+        @media (max-width: 480px) {
+            body {
+                padding-top: 40px;
+            }
+
+            .captcha-area {
+                flex-direction: column; /* Susun vertikal di HP */
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            input[type="text"] {
+                width: 100%; /* Lebar penuh di HP */
+                box-sizing: border-box;
+            }
+
+            .btn-submit {
+                width: 100%; /* Tombol lebar penuh agar mudah diklik jempol */
+            }
+
+            .captcha-display {
+                width: 100%; /* Box captcha lebar penuh */
+                box-sizing: border-box;
+            }
         }
     </style>
 </head>
@@ -81,14 +113,13 @@
     
     <div class="captcha-area">
         <div class="captcha-display" id="captchaBox"></div>
-        <input type="text" id="userInput" placeholder="Ketik kode di sini...">
+        <input type="text" id="userInput" placeholder="Ketik kode di sini..." autocomplete="off">
     </div>
 
     <button class="btn-submit" onclick="checkVerification()">Submit</button>
 </div>
 
 <script>
-    // Link tujuan
     const targetUrl = "https://bapeten.github.io/balis/S1/250184311_KTUN_Sertifikat_UK_PT.%20Natus%20Vincere%20Medika.pdf";
 
     function generateCaptcha() {
@@ -102,10 +133,9 @@
 
     function checkVerification() {
         const captchaCode = document.getElementById('captchaBox').innerText.replace(/\s/g, '');
-        const userValue = document.getElementById('userInput').value.toLowerCase();
+        const userValue = document.getElementById('userInput').value.toLowerCase().trim();
 
         if (userValue === captchaCode) {
-            // Langsung redirect tanpa alert
             window.location.href = targetUrl;
         } else {
             alert("❌ Kode salah! Silakan coba lagi.");
@@ -113,9 +143,15 @@
             document.getElementById('userInput').value = '';
         }
     }
+
+    // Mendukung tombol "Go" atau "Enter" di keyboard HP
+    document.getElementById("userInput").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            checkVerification();
+        }
+    });
 </script>
 
 </body>
-
 </html>
-
