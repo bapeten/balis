@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Captcha</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            padding-top: 80px;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .label-text {
+            font-weight: bold;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .captcha-area {
+            display: flex;
+            align-items: center;
+            gap: 80px;
+        }
+
+        .captcha-display {
+            background-color: white;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+            font-size: 26px;
+            font-weight: bold;
+            color: #2b5797;
+            letter-spacing: 6px;
+            user-select: none;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px;
+            font-size: 14px;
+            outline-color: #007bff;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: fit-content;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body onload="generateCaptcha()">
+
+<div class="container">
+    <div class="label-text">Verification Code</div>
+    
+    <div class="captcha-area">
+        <div class="captcha-display" id="captchaBox"></div>
+        <input type="text" id="userInput" placeholder="Ketik kode di sini...">
+    </div>
+
+    <button class="btn-submit" onclick="checkVerification()">Submit</button>
+</div>
+
+<script>
+    // Link tujuan
+    const targetUrl = "https://drive.google.com/file/d/1Up_YQZduOcebS_d_UisK2s-TaeKT586x/view";
+
+    function generateCaptcha() {
+        const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < 4; i++) {
+            result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        document.getElementById('captchaBox').innerText = result.split('').join(' ');
+    }
+
+    function checkVerification() {
+        const captchaCode = document.getElementById('captchaBox').innerText.replace(/\s/g, '');
+        const userValue = document.getElementById('userInput').value.toLowerCase();
+
+        if (userValue === captchaCode) {
+            // Langsung redirect tanpa alert
+            window.location.href = targetUrl;
+        } else {
+            alert("❌ Kode salah! Silakan coba lagi.");
+            generateCaptcha(); 
+            document.getElementById('userInput').value = '';
+        }
+    }
+</script>
+
+</body>
+</html>
